@@ -1,0 +1,158 @@
+.btn {
+    width:auto;
+    height:auto;
+}
+
+.input-btn {
+    margin-left: 10px;
+}
+
+.smaller-padding {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.top-margin {
+    margin-top: 10px;
+}
+
+.row {
+    padding: 10px 0;
+}
+
+.row table {
+    width: auto;
+    min-width: 60%;
+}
+
+.row table.huntgroup-manager {
+    min-width: 0%;
+    margin: 0 8px;
+}
+
+.row table thead tr td {
+    background-color: #afccf4;
+    font-weight: bold;
+}
+
+.row table thead tr td, .row table tbody tr td {
+    vertical-align: middle;
+    padding: 2px;
+    padding-left: 7px;
+}
+
+.row table tr td.timeout {
+    width: 50px;
+}
+
+.row table tr.invalid td[colspan="4"] {
+    text-align: left;
+}
+
+.row:first-child {
+    padding: 10px 0 0 0;
+}
+
+.row table thead td.arrows {
+    width: 5px;
+}
+
+.row table tbody td.arrows {
+    font-size: 32px;
+}
+
+.row table tbody td.arrows span {
+    cursor: pointer;
+}
+
+.row table tbody td.center {
+    text-align: center;
+}
+
+.row table tbody td.center input[type="checkbox"]{
+    margin: .25rem 0 0 0;
+    text-align: center;
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+}
+
+.row table tbody td.middle {
+    vertical-align: middle;
+}
+
+.form-control.btn-auto-width {
+    width: auto;
+}
+
+.huntgroup-manager .form-group label {
+    margin-bottom: 0;
+}
+
+.huntgroup-manager .form-group input[type="text"] {
+    padding: .2rem .5rem;
+}
+
+.huntgroup-manager .form-group select {
+    height: calc(1.7rem + 2px);
+    padding: .2rem .3rem;
+}
+
+.activeRoutingNumber table {
+    width: auto;
+    min-width: 0;
+}
+
+.activeRoutingNumber table tr td:first-child {
+    width: auto;
+    max-width: none;
+}
+.activeRoutingNumber table thead tr td {
+    background-color: transparent;
+    font-size: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.activeRoutingNumber table tbody tr td:first-child, .activeRoutingNumber table tbody tr td:last-child {
+    text-align: center;
+}
+
+.activeRoutingNumber table thead tr td, .activeRoutingNumber table tbody tr td {
+    padding: .1rem .25rem;
+    cursor: auto;
+}
+
+.row table tbody tr td.destinationNumber.break {
+    word-break: break-all;
+}
+
+select.active, input.active {
+    background: #bcf4b8;
+}
+
+select.inactive, input.inactive {
+    background: #edc065;
+}
+
+.form-group.no-margin-bottom {
+    margin-bottom: 0rem;
+}
+
+td.no-padding-top {
+    padding-top: 0rem !important;
+}
+
+td.no-padding-bottom {
+    padding-bottom: 0rem !important;
+}
+
+td.padding-top-5 {
+    padding-top: 1rem !important;
+}
+
+@media only screen and (max-width: 767px) {
+    .row table {
+        width: 100%;
+    }
+}

@@ -1,0 +1,7 @@
+::ng-deep .ngb-tp-hour .btn:first-child, ::ng-deep .ngb-tp-minute .btn:first-child {
+    padding: 2px .75rem .5rem .75rem;
+}
+
+::ng-deep .ngb-tp-spacer {
+    margin-top: -6px;
+}

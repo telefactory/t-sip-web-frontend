@@ -1,0 +1,249 @@
+/* You can add global styles to this file, and also import other style files */
+
+/*
+  http://www.html-color-names.com/darkslateblue.php
+  darkslateblue complimentary colors:
+  #483d8b (darkslateblue)
+  #1b153e (darker shade)
+  #8274d7 (brighter shade)
+  #3e380f
+  #8b813d
+*/
+
+$container-max-widths: (
+    xs: 540px,
+    sm: 700px,
+    md: 960px,
+    lg: 1140px,
+    xl: 1300px,
+    g: 1560px
+);
+
+$grid-gutter-width: 6px;
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+@keyframes fadeSuccess {
+  0%   { background-color: #3b5f98; }
+  30%  { background-color: green; }
+  50%  { background-color: green; }
+  70%  { background-color: green; }
+  100% { background-color: #3b5f98; }
+}
+
+.btn-saved {
+  background-image:none !important; 
+     animation: fadeSuccess 1s ease-in-out; 
+}
+
+@keyframes fadeError {
+  0%   { background-color: #3b5f98; }
+  30%  { background-color: red; }
+  50%  { background-color: red; }
+  70%  { background-color: red; }
+  100% { background-color: #3b5f98; }
+}
+
+.btn-saved-error {
+  background-image:none !important; 
+     animation: fadeError 1s ease-in-out; 
+}
+
+.input-radio-margin {
+  margin-right: 3px;
+}
+
+.modal-content {
+  background-color: #eeedf4;
+}
+
+.remove-padding {
+  padding: 0px;
+}
+
+p, h3, .col {
+  color: #333;
+}
+
+.nav>li>a {
+  color: #fff;
+}
+
+.btn-primary {
+  background-color: #3b5f98;
+  border-color: #3b5f98;
+  color: white;
+}
+
+.margin-bottom-15 {
+  margin-bottom: 15px;
+}
+
+.navbar {
+  color: #fff;
+  background-color: darkslateblue;
+  border-color: #fff;
+}
+
+
+
+body .container{
+  background-color: #fff;
+  color: #222;
+}
+
+footer {
+  color: #fff;
+  background-color: darkslateblue !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #fff;
+}
+
+footer a {
+  color: #fff !important;
+}
+
+footer .attribution {
+  padding: 0 5px;
+}
+
+.card {
+  border: 1px solid #1b153e;
+}
+
+.card-header {
+  padding-top: 0.3rem;
+  padding-right: 0.5rem;
+  padding-bottom: 0.3rem;
+  padding-left: 0.5rem;
+}
+
+.card-header > a {
+  color: #222;
+}
+
+.card-body {
+  padding: 0.75em;
+}
+
+
+.nav-tabs > li > a {
+  color: #222;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 300px;
+    overflow-x: hidden;
+}
+
+.row {
+  padding: 1px 0px;
+}
+
+.stats_line {
+  border-bottom: 2px solid black;
+}
+
+.serviceGroup div {
+  white-space: normal;
+}
+
+.activeRoutingNumber table {
+  border-collapse: separate;
+  display: table;
+  border-spacing: 0;
+}
+
+.activeRoutingNumber table tbody {
+  display: table-row-group;
+}
+
+.activeRoutingNumber table tr {
+  cursor: pointer;
+  display: table-row;
+  background-color: none;
+}
+
+.btn-primary:disabled {
+  color: #fff;
+  background-color: red;
+  border-color: red;
+}
+
+.userManual h4 {
+  text-decoration: underline;
+}
+
+.userManual ul.noBullets {
+  list-style: none;
+}
+
+.activeRoutingNumber table tr td:first-child, .temporaryRoutingNumber input[type="radio"] {
+  height: 11px;
+  font-size: 5px;
+  max-width: 11px;
+}
+
+.activeRoutingNumber table tr td {
+  color: white;
+  border: 1px solid transparent;
+}
+.activeRoutingNumber table tr.odd td {
+  background-color: #817f82;
+  border-color: #817f82;
+}
+.activeRoutingNumber table tr.even td {
+  background-color: #b0b0b0;
+  border-color: #b0b0b0;
+}
+
+.activeRoutingNumber table tr td:first-child {
+border-top-left-radius: 4px;
+border-bottom-left-radius: 4px;
+}
+
+.activeRoutingNumber table tr td:last-child {
+border-top-right-radius: 4px;
+border-bottom-right-radius: 4px;
+}
+
+.activeRoutingNumber table tr.active td {
+background-color: #28a745;
+border-color: #28a745;
+}
+
+.activeRoutingNumber table tr.spacer {
+height: 5px;
+}
+
+.activeRoutingNumber table tr.active:hover td {
+background-color: #218838;
+border-color: #218838;
+-webkit-transition: all .15s ease-in-out;
+transition: all .15s ease-in-out;
+}
+
+.activeRoutingNumber table tr td {
+padding: 2px 10px;
+display: table-cell;
+text-align: left;
+}
+
+a.updateOpeningInfo, a.updateOpeningInfo:active, a.updateOpeningInfo:hover, a.updateOpeningInfo:link {
+  color: #2058ad;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.openingInfo {
+  font-size: 10px;
+  margin: 0 0 10px 0;
+}
+
+.smallText {
+  margin: 3px 0;
+  font-size: 13px;
+}

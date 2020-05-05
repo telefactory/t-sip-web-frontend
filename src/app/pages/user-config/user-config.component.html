@@ -1,0 +1,148 @@
+<div class="row">
+  <ngb-accordion #acc="ngbAccordion" class="col">
+    <ng-template ngbPanelTitle>
+      JSON
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <pre>{{ userList | json }}</pre>
+    </ng-template>
+  </ngb-accordion>
+</div>
+
+<div class="row">
+  <ngb-accordion [closeOthers]="true" #acc="ngbAccordion" activeIds="user-0" class="col">
+    <ngb-panel *ngFor="let user of userList; let userIndex = index" id="user-{{userIndex}}">
+      <ng-template ngbPanelTitle>
+        Bruker #{{user.id}} - {{user.username}}
+      </ng-template>
+      <ng-template ngbPanelContent>
+
+        <form>
+          <div class="form-group">
+            <div class="row">
+              <div class="col">
+                <label for="userName">Brukernavn: </label>
+                <input class="form-control" [(ngModel)]="user.username" name="userName" placeholder="brukernavn"
+                  id="userName" required />
+              </div>
+              <div class="col">
+                <label for="password">Passord: </label>
+                <input class="form-control" [(ngModel)]="user.password" name="password" placeholder="passord"
+                  id="password" />
+              </div>
+              <div class="col">
+                <label for="email">E-post: </label>
+                <input class="form-control" [(ngModel)]="user.email" name="email" placeholder="e-post" id="email" />
+              </div>
+              <div class="col" *ngIf="user.isAgent()">
+                <label for="serviceId">ServiceGruppe ID (Agent): </label>
+                <input class="form-control" [(ngModel)]="user.service_id" name="serviceId" placeholder="e-post"
+                  id="serviceId" />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 form-group">
+              <div class="pt-1">
+                <label>Kunde: </label>
+              </div>
+              <div ngbDropdown class="d-inline-block" container="body">
+                <button class="btn btn-primary" id="dropdownCustomer"
+                  ngbDropdownToggle>{{ getCustomerId(user)?.customer_name || 'Uninitialized' }}</button>
+                <div class="scrollable-menu" ngbDropdownMenu aria-labelledby="dropdownCustomer">
+                  <button ngbDropdownItem *ngFor="let customer of customerList"
+                    (click)="user.customer_id = customer.customer_id">{{ customer.customer_name }}</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4 form-group">
+              <div class="pt-1">
+                <label>Brukermanual: </label>
+              </div>
+              <div ngbDropdown class="d-inline-block" container="body">
+                <button class="btn btn-primary" id="dropdownManual"
+                  ngbDropdownToggle>{{ getUserManual(user)?.title || 'Ingen' }}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownManual">
+                  <button ngbDropdownItem (click)="user.user_manual_type = 0">Ingen</button>
+                  <button ngbDropdownItem *ngFor="let manual of userManualList"
+                    (click)="user.user_manual_type = manual.id">{{ manual.title }}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col form-group">
+              <div class="pt-1">
+                <label for="userRoles">Roller: </label>
+              </div>
+              <span id="userRoles">
+                <label class="btn btn-primary" (click)="user.toggleRole('CUSTOMER')"
+                  [ngClass]="{'active': user.isCustomer()}">Kunde</label>
+                <label class="btn btn-primary" (click)="user.toggleRole('ADMIN')"
+                  [ngClass]="{'active': user.isAdmin()}">Admin</label>
+                <label class="btn btn-primary" (click)="user.toggleRole('SUPERADMIN')"
+                  [ngClass]="{'active': user.isSuperAdmin()}">Superadmin</label>
+                <label class="btn btn-primary" (click)="user.toggleRole('AGENT')"
+                  [ngClass]="{'active': user.isAgent()}">Agent</label>
+              </span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="pt-1">
+                <label for="userRoles">Instillinger: </label>
+              </div>
+              <div class="form-check" *ngIf="user.isCustomer()">
+                <input type="checkbox" class="form-check-input" id="dynamicServiceGroups" value="1"
+                  [(ngModel)]="user.show_dynamic_service_groups" name="dynamicServiceGroups" />
+                <label class="form-check-label" for="dynamicServiceGroups">Dynamiske Service Grupper</label>
+              </div>
+
+              <div class="form-check" *ngIf="user.isAgent()">
+                <input type="checkbox" class="form-check-input" id="statisticsRestrictions" value="1"
+                  [(ngModel)]="user.show_statistics_restrictions" name="statisticsRestrictions" />
+                <label class="form-check-label" for="statisticsRestrictions">Statistikk Restriksjoner</label>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="showStatistics" value="1"
+                  [(ngModel)]="user.show_statistics" name="showStatistics" />
+                <label class="form-check-label" for="showStatistics">Tilgang til statistikker</label>
+              </div>
+
+              <div class="form-check" *ngIf="user.isAgent() || user.isCustomer()">
+                <input type="checkbox" class="form-check-input" id="advancedWeeklySchedule" value="1"
+                  [(ngModel)]="user.advanced_weekly_schedule" name="advancedWeeklySchedule" />
+                <label class="form-check-label" for="advancedWeeklySchedule">Avansert ukentlig timeplan</label>
+              </div>
+
+              <div class="form-check" *ngIf="user.isAgent() || user.isCustomer()">
+                <input type="checkbox" class="form-check-input" id="hideYearlyStatistics" value="1"
+                  [(ngModel)]="user.hide_yearly_statistics" name="hideYearlyStatistics" />
+                <label class="form-check-label" for="hideYearlyStatistics">Skjul årlig statistikk</label>
+              </div>
+            </div>
+          </div>
+          <hr class="mt-4">
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-danger" (click)="deleteUser(user)">Slett</button>
+              <button class="btn btn-primary float-right" (click)="saveUser(user)">Lagre</button>
+            </div>
+          </div>
+        </form>
+
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</div>
+
+<div class="row">
+  <div class="button-box col-lg-12">
+    <button class="btn btn-primary" (click)="addUser()">Ny bruker</button>
+  </div>
+</div>

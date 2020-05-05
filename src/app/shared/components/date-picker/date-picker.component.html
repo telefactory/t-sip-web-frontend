@@ -1,0 +1,12 @@
+
+<form class="form-inline">
+  <div class="form-group">
+    <div class="input-group">
+      <input class="form-control" placeholder="yyyy-mm-dd"
+             name="dp" [(ngModel)]="dateObj" (ngModelChange)="changeDate($event)" [minDate]="minDate" [maxDate]="maxDate" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" container="body">
+      <div class="input-group-addon" (click)="d.toggle()" >
+        <img src="../../../assets/calendar.svg" style="width: 25px; height: 35px; cursor: pointer; margin-left: 3px"/>
+      </div>
+    </div>
+  </div>
+</form>

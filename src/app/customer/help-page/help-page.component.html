@@ -1,0 +1,18 @@
+<div *ngIf="!user.isAdmin()">
+    <div *ngFor="let news of userNews" class="row">
+        <div class="col">
+            <div class="card">
+                <div class="col-md-8 card-body">
+                    <label><strong style="color: red;">Nyheter</strong>:</label>
+                    <button type="button" class="btn btn-link" (click)="news.isCollapsed = !news.isCollapsed"
+                        [attr.aria-expanded]="!news.isCollapsed">
+                        {{ news.title }}
+                    </button>
+                </div>
+                <div [ngbCollapse]="!news.isCollapsed">
+                    <div class="card-body" [innerHTML]="news.content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

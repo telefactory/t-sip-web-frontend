@@ -1,0 +1,123 @@
+<div class="row">
+    <div class="col form-group nextOpeningMessage">
+        <label>Ukesoppsett:</label>
+        <div class="col-sm-8 col-md-6 nopadding">
+            <table class="table table-sm">
+                <thead class="blue-bg">
+                    <tr>
+                        <th>Dag</th>
+                        <th class="center">Åpner</th>
+                        <th class="center">Stenger</th>
+                        <th class="center">Stengt</th>
+                        <!--th *ngIf="advancedWeeklySchedule" class="d-none d-md-table-cell center">Neste</th-->
+                        <th *ngIf="advancedWeeklySchedule" class="d-none d-sm-table-cell center">Liste</th>
+                        <th *ngIf="advancedWeeklySchedule" class="d-none d-md-table-cell center"></th>
+                        <th *ngIf="advancedWeeklySchedule" class="d-none d-md-table-cell center"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let event of localizedEvents; let i = index" [attr.data-index]="i"
+                        [ngClass]="{'today': dow == event.dow, 'closed': isClosed(event), 'add-border': localizedEvents[i - 1] && event.dow !== localizedEvents[i - 1].dow}">
+
+                        <td class="vertical-align">
+                            <span class="d-none d-md-block">{{ event.dayLocalized }}</span>
+                            <span class="d-xs-block d-md-none">{{ getShortenedWeekDay(event.dayLocalized) }}</span>
+                        </td>
+
+                        <td>
+                            <select class="form-control weekly-schedule" name="event_{{ i }}_start"
+                                [disabled]="event.closed" (change)="setStartHour(event, $event)">
+                                <option *ngFor="let hour of hours" [selected]="event.start == hour">{{ hour }}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control weekly-schedule" name="event_{{ i }}_end"
+                                [disabled]="event.closed" (change)="setEndHour(event, $event)">
+                                <option *ngFor="let hour of hours" [selected]="event.end == hour"
+                                    [disabled]="hour < event.start">{{ hour }}</option>
+                            </select>
+                        </td>
+                        <td class="center vertical-align">
+                            <input type="checkbox" name="event_{{ i }}_closed" [checked]="event.closed"
+                                (change)="setClosed(event, $event)" />
+                        </td>
+                        <td class="d-none d-sm-table-cell" *ngIf="advancedWeeklySchedule">
+                            <select class="form-control weekly-schedule automatic" name="event_list"
+                                (change)="setNextList(event, $event)">
+                                <option value="">(Aktiv liste)</option>
+                                <option *ngFor="let list of getSelectedModuleLists(event)"
+                                    [selected]="event.listId == list.hunt_group_list_id"
+                                    [value]="list.hunt_group_list_id">
+                                    {{ list.name }}</option>
+                            </select>
+                        </td>
+                        <td class="d-none d-md-table-cell" *ngIf="advancedWeeklySchedule">
+                            <button class="btn btn-link" style="width: 80px;"
+                                (click)="addDay(event.day, event.dow, event.end, event.nextMID, event.listId, i)">
+                                Legg til
+                            </button>
+                        </td>
+                        <ng-container
+                            *ngIf="advancedWeeklySchedule && (localizedEvents[i - 1] && event.dow === localizedEvents[i - 1].dow); then hide; else show">
+                        </ng-container>
+
+                        <ng-template #hide>
+                            <td class="d-none d-md-table-cell">
+                                <button class="btn btn-link" (click)="removeDay(i)">
+                                    Fjern
+                                </button>
+                            </td>
+                        </ng-template>
+                        <ng-template #show>
+                            <td *ngIf="advancedWeeklySchedule" class="d-none d-md-table-cell">
+
+                            </td>
+                        </ng-template>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="nopadding col-lg-5 col-md-8 col-sm-12" *ngIf="advancedWeeklySchedule">
+            <div class="card">
+                <p class="padding blue-bg">Hvis ingen periode gir treff</p>
+                <div class="padding-lr">
+                    <div class="row">
+                        <span class="col my-auto">
+                            <label>Gå til liste</label>
+                        </span>
+                        <div class="col my-auto">
+                            <select [ngModel]="this.schedule.weekly_closed_list_id" #t
+                                (change)="onSelectedChange(t.value)"
+                                class="form-control form-control-sm weekly-schedule" name="default_list"
+                                [disabled]="weeklyClosedPlayMessage">
+                                <option value="null">(Aktiv liste)</option>
+                                <option *ngFor="let list of getSelectedModuleLists(this.events[0])"
+                                    [selected]="list.hunt_group_list_id" [value]="list.hunt_group_list_id">
+                                    {{ list.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <span class="col my-auto">
+                            <label>Spill av talemelding</label>
+                        </span>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" class="form-control"
+                                id="weeklyClosedPlayMessage" value="0" [(ngModel)]="weeklyClosedPlayMessage" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr *ngIf="advancedWeeklySchedule">
+        <div class="openingInfo">
+            Tapte anrop: {{ missedCallsSinceClosed }}
+            <a class="updateOpeningInfo" (click)="updateOpeningInfo()">Oppdater tapte anrop</a>
+        </div>
+        <input type="checkbox" class="form-control" id="nextOpeningMessage" value="1"
+            [(ngModel)]="nextOpeningMessage" />
+        <label for="nextOpeningMessage">Spill av neste åpningstids-melding</label>
+    </div>
+</div>

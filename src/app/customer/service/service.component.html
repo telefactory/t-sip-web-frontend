@@ -1,0 +1,40 @@
+
+<div *ngIf="user.isAdmin()" class="row">
+  <div class="col">
+
+    <div class="card">
+      <div id="serviceCard" [ngbCollapse]="headerCollapsed" class="card-body">
+
+        <div class="row">
+          <div class="col-md-4 form-group">
+            <label for="serviceDescription">Tjenestebeskrivelse</label>
+            <input class="form-control" [(ngModel)]="service.description"
+                   placeholder="beskrivelse" id="serviceDescription" required />
+          </div>
+
+          <span class="col-md-4 form-group">
+            <label for="serviceNumber">Tjenestenummer: </label>
+            <input class="form-control" [(ngModel)]="service.serviceNumber"
+                   placeholder="tjenestenummer" id="serviceNumber" required />
+          </span>
+        </div>
+
+        <div *ngIf="user.isAdmin()" class="row">
+          <span class="col-md-4">
+            <label>Startdato: </label>
+            <app-date-picker [target]="service" [property]="'startDate'"></app-date-picker>
+          </span>
+
+          <span class="col-md-4">
+            <label>Sluttdato: </label>
+            <app-date-picker [target]="service" [property]="'endDate'"></app-date-picker>
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+

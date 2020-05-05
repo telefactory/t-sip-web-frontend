@@ -1,0 +1,9 @@
+p.small em {
+    font-size: 15px;
+}
+
+button.btn.updateStatistics {
+    width: auto;
+    padding-left: 2px;
+    padding-right: 2px;
+}

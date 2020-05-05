@@ -1,0 +1,255 @@
+<app-help-page></app-help-page>
+
+<div class="row">
+  <div class="col">
+
+    <!-- Customer card -->
+    <div class="card" id="custCard">
+      <div id="customerCard" class="card-body">
+
+        <div class="row">
+          <span class="col-md-4">
+            <label for="customer_name">Kundenavn: <strong>{{customer.customer_name}}</strong> </label>
+            <input *ngIf="user.isAdmin()" class="form-control" [(ngModel)]="customer.customer_name"
+              placeholder="kundenavn" id="customer_name" required />
+          </span>
+
+          <span *ngIf="user?.isAdmin()" class="col-md-4">
+            <label for="contact_name">Kontaktnavn: <strong>{{customer.contact_name}}</strong></label>
+            <input *ngIf="user.isAdmin()" class="form-control" [(ngModel)]="customer.contact_name"
+              placeholder="kontaktnavn" id="contact_name" required />
+          </span>
+
+          <span *ngIf="user?.isAdmin()" class="col-md-4">
+            <label for="contact_number">Kontaktnummer: <strong>{{customer.contact_number}}</strong></label>
+            <input *ngIf="user.isAdmin()" class="form-control" [(ngModel)]="customer.contact_number"
+              placeholder="kontaktnummer" id="contact_number" required />
+          </span>
+        </div>
+
+        <nav>
+          <div *ngIf="!showDynamicServiceGroups" class="col-lg-6 p-2">
+            <div class="serviceGroups">
+              <div class="serviceGroup"
+                *ngFor="let sg of getServiceGroups(); let idx = index; let isEven = even; let isOdd = odd">
+                <div class="btn text-left"
+                  [ngClass]="{'margin': !showDynamicServiceGroups, 'btn-success': sg.service_group_id === selectedServiceGroup.service_group_id, 'btn-primary': sg.service_group_id !== selectedServiceGroup.service_group_id, 'even': isEven, 'odd': isOdd}"
+                  (click)="selectedServiceGroup = sg">
+                  <table>
+                    <tbody>
+                      <tr *ngFor="let number of sg.number_list; let $first = first" style="font-weight: bold"
+                        [ngClass]="{'service-red': getPassedEndDate(number), 'service-cursive': getBeforeStartDate(number), 'service-blue': getPassedFrozenDate(number)}">
+                        <td>
+                          <form class="form-inline">
+                            <input *ngIf="$first" type="radio" name="servicegroup" value="sg.service_group_id"
+                              [checked]="sg.service_group_id == selectedServiceGroup.service_group_id"
+                              (change)="selectedServiceGroup = sg" />
+                          </form>
+                        </td>
+                        <td>
+                          {{ number.service_number }}
+                        </td>
+                        <td>
+                          {{ number.description }}
+                        </td>
+                      </tr>
+                      <tr *ngIf="sg.number_list.length == 0">
+                        <td>
+                          <form class="form-inline">
+                          <input type="radio" name="servicegroup" value="sg.service_group_id"
+                            [checked]="sg.service_group_id == selectedServiceGroup.service_group_id"
+                            (change)="selectedServiceGroup = sg" />
+                          </form>
+                        </td>
+                        <td colspan="2">
+                          Ingen nummer
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ngb-tabset *ngIf="showDynamicServiceGroups" [destroyOnHide]="false">
+            <ngb-tab title="Gruppe">
+              <ng-template ngbTabContent>
+                <div class="col-lg-6 p-2">
+                  <div class="serviceGroups">
+                    <div class="serviceGroup"
+                      *ngFor="let sg of getServiceGroups(); let idx = index; let isEven = even; let isOdd = odd">
+                      <span *ngIf="showDynamicServiceGroups">
+                        <label>Gruppe: <strong>{{ sg.description }}</strong></label>
+                        <br />
+                      </span>
+                      <div class="btn text-left"
+                        [ngClass]="{'margin': !showDynamicServiceGroups, 'btn-success': sg.service_group_id === selectedServiceGroup.service_group_id, 'btn-primary': sg.service_group_id !== selectedServiceGroup.service_group_id, 'even': isEven, 'odd': isOdd}"
+                        (click)="selectedServiceGroup = sg">
+                        <table>
+                          <tbody>
+                            <tr *ngFor="let number of sg.number_list; let $first = first" style="font-weight: bold"
+                              [ngClass]="{'service-red': getPassedEndDate(number), 'service-cursive': getBeforeStartDate(number), 'service-blue': getPassedFrozenDate(number)}">
+                              <td>
+                                <form class="form-inline">
+                                  <input *ngIf="$first" type="radio" name="servicegroup" value="sg.service_group_id"
+                                    [checked]="sg.service_group_id == selectedServiceGroup.service_group_id"
+                                    (change)="selectedServiceGroup = sg" />
+                                </form>
+
+                              </td>
+                              <td>
+                                {{ number.service_number }}
+                              </td>
+                              <td>
+                                {{ number.description }}
+                              </td>
+                            </tr>
+                            <tr *ngIf="sg.number_list.length == 0">
+                              <td>
+                                <form class="form-inline">
+
+                                <input type="radio" name="servicegroup" value="sg.service_group_id"
+                                  [checked]="sg.service_group_id == selectedServiceGroup.service_group_id"
+                                  (change)="selectedServiceGroup = sg" />
+                                  </form>
+                              </td>
+                              <td colspan="2">
+                                Ingen nummer
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+            <ngb-tab title="Gruppe Admin">
+              <ng-template ngbTabContent>
+                <div class="col-sm-12 col-lg-12 p-2">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                      <div class="header">
+                        <h5>Dynamiske service grupper</h5>
+                        <span>
+                          <input type="checkbox" class="form-control" id="showNumber" value="1"
+                            [(ngModel)]="showNumber" />
+                          <label for="showNumber">Vis nummer</label>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 availableNumber">Ledige Nummer</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                      Velg gruppe
+                      <div class="group radio-inline" *ngFor="let sg of getServiceGroups()"
+                        (click)="selectedDynamicServiceGroup = sg">
+                        <input type="radio"
+                          [checked]="sg.service_group_id == selectedDynamicServiceGroup?.service_group_id"
+                          (change)="selectedDynamicServiceGroup = sg" />
+                        <span>&nbsp;{{ sg.description }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                      <div>
+                        <select class="flex-grow form-control" multiple="multiple" [(ngModel)]="selectedDynamicNumbers"
+                          [ngStyle]="{'min-height': getSelectHeight(selectedDynamicServiceGroupNumbers) + 'px'}">
+                          <option [value]="number" *ngFor="let number of selectedDynamicServiceGroupNumbers">
+                            {{ getNumberOrDescription(number) }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-2 col-sm-4 column-bottom">
+                      <button onmousedown="event.preventDefault()" class="btn btn-block btn-primary"
+                        (click)="addSelectedNumbersDynamic()">&laquo; Legg
+                        til</button>
+                      <button onmousedown="event.preventDefault()" class="btn btn-block btn-primary"
+                        (click)="removeSelectedNumbersDynamic()">Fjern
+                        &raquo;</button>
+                    </div>
+                    <div class="col-md-4 col-sm-4 d-flex flex-column">
+                      <span class="availableNumberPhone">Ledige Nummer</span>
+                      <select class="flex-grow form-control" multiple="multiple"
+                        [(ngModel)]="selectedDynamicNumbersSpecific"
+                        [ngStyle]="{'min-height': getSelectHeight(unusedNumbers) + 'px'}">
+                        <option [value]="number" *ngFor="let number of unusedNumbers">
+                          {{ getNumberOrDescription(number) }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+            <ngb-tab title="Stats">
+              <ng-template ngbTabContent>
+                <div class="col-sm-12 col-lg-12 p-2">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                      <div class="header">
+                        <h5>Statistikk Restriksjoner</h5>
+                        <span>
+                          <input type="checkbox" class="form-control" id="showNumber" value="1"
+                            [(ngModel)]="showNumber" />
+                          <label for="showNumber">Vis nummer</label>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 availableNumber">Ledige Nummer</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                      Velg gruppe
+                      <div class="group" *ngFor="let sg of getServiceGroups()"
+                        (click)="selectedRestrictionServiceGroup = sg">
+                        <input type="radio"
+                          [checked]="sg.service_group_id == selectedRestrictionServiceGroup?.service_group_id"
+                          (change)="selectedRestrictionServiceGroup = sg" />
+                        <span>&nbsp;{{ sg.description }}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                      <div>
+                        <select class="flex-grow form-control" multiple="multiple"
+                          [(ngModel)]="selectedRestrictedNumbers"
+                          [ngStyle]="{'min-height': getSelectHeight(selectedRestrictedServiceGroupNumbers) + 'px'}">
+                          <option [value]="number" *ngFor="let number of selectedRestrictedServiceGroupNumbers">
+                            {{ getNumberOrDescription(number) }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-2 col-sm-4 column-bottom">
+                      <button onmousedown="event.preventDefault()" class="btn btn-block btn-primary"
+                        (click)="addSelectedNumbersRestricted()">&laquo; Legg
+                        til</button>
+                      <button onmousedown="event.preventDefault()" class="btn btn-block btn-primary"
+                        (click)="removeSelectedNumbersRestricted()">Fjern
+                        &raquo;</button>
+                    </div>
+                    <div class="col-md-4 col-sm-4 d-flex flex-column">
+                      <span class="availableNumberPhone">Ledige Nummer</span>
+                      <select class="flex-grow form-control" multiple="multiple"
+                        [(ngModel)]="selectedRestrictedNumbersSpecific"
+                        [ngStyle]="{'min-height': getSelectHeight(unusedRestrictedServiceGroupNumbers) + 'px'}">
+                        <option value="all" *ngIf="unusedRestrictedServiceGroupNumbers.length > 0">Alle</option>
+                        <option [value]="number" *ngFor="let number of unusedRestrictedServiceGroupNumbers">
+                          {{ getNumberOrDescription(number) }}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-call-flow [callFlow]="selectedServiceGroup.call_flow"></app-call-flow>

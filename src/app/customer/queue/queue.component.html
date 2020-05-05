@@ -1,0 +1,245 @@
+<div class="row">
+
+  <div *ngIf="user.isAdmin()" class="col-md-4">
+    <label>Nummervisning: </label>
+    <form class="form-inline">
+      <label class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="anumber-radio" [value]="true" [(ngModel)]="queue.use_true_a_number"> Sann
+      </label>
+      <label style="margin-left: 5px" class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="anumber-radio" [value]="false" [(ngModel)]="queue.use_true_a_number"> Tjeneste
+      </label>
+    </form>
+  </div>
+
+  <div *ngIf="user.isAdmin()" class="col-md-4">
+    <label>Oppgi tjenestenummer: </label>
+    <form class="form-inline">
+      <label class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="present-radio" [value]="true" [(ngModel)]="queue.present_number"> Ja
+      </label>
+      <label style="margin-left: 5px" class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="present-radio" [value]="false" [(ngModel)]="queue.present_number"> Nei
+      </label>
+    </form>
+  </div>
+
+  <div *ngIf="user.isAdmin()" class="col-md-4">
+    <label>Køing aktivert: </label>
+    <form class="form-inline">
+      <label class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="queueing-radio" [value]="true" [(ngModel)]="queue.queueing_enabled"> Ja
+      </label>
+      <label style="margin-left: 5px" class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="queueing-radio" [value]="false" [(ngModel)]="queue.queueing_enabled"> Nei
+      </label>
+    </form>
+  </div>
+
+</div>
+
+<div class="row" *ngIf="user.isAdmin()">
+  <div class="col-md-4">
+    <label>Varsle om anrop: </label>
+    <form class="form-inline">
+      <label class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="announce-radio" [value]="true" [(ngModel)]="queue.announce_call"> Ja
+      </label>
+      <label style="margin-left: 5px" class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="announce-radio" [value]="false" [(ngModel)]="queue.announce_call"> Nei
+      </label>
+    </form>
+  </div>
+</div>
+
+<div class="row" *ngIf="user.isAdmin()">
+  <div class="col-md-4">
+    <label>Oppgi køposisjon: </label>
+    <form class="form-inline">
+      <label class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="givepos-radio" [value]="true" [(ngModel)]="queue.give_position"> Ja
+      </label>
+      <label style="margin-left: 5px" class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="givepos-radio" [value]="false" [(ngModel)]="queue.give_position"> Nei
+      </label>
+    </form>
+  </div>
+
+  <div class="col-md-4">
+    <label>SMS-varsling: </label>
+    <form class="form-inline">
+      <label class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="alert-radio" [value]="true" [(ngModel)]="queue.alert_on_free"> Ja
+      </label>
+      <label style="margin-left: 5px" class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="alert-radio" [value]="false" [(ngModel)]="queue.alert_on_free"> Nei
+      </label>
+    </form>
+  </div>
+
+  <div *ngIf="user.isAdmin()" class="col-md-4">
+    <label>SMS-tekst: </label>
+    <input class="form-control" [(ngModel)]="queue.smsText" maxlength="140" placeholder="SMS-tekst" />
+  </div>
+</div>
+
+<div class="row">
+  <div *ngIf="user.isAdmin()" class="col-lg-4 col-md-12">
+    <label>AnswerQueuePolicy: </label>
+    <br />
+    <div ngbDropdown class="d-inline-block" container="body">
+      <button class="btn btn-primary" id="dropdownAnswerQueueDrop"
+        ngbDropdownToggle>{{ queue.answer_queue_policy || 'NO_ANSWER' }}</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownAnswerQueueDrop">
+        <button ngbDropdownItem *ngFor="let option of answerQueuePolicyOptions"
+          (click)="setAnswerQueuePolicy(option)">{{option}}</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="user.isAdmin()" class="col-lg-4 col-md-12">
+    <label>RingTonePolicy: </label>
+    <br />
+    <div ngbDropdown class="d-inline-block" container="body">
+      <button class="btn btn-primary" id="dropdownRingTonePolicy"
+        ngbDropdownToggle>{{ queue.ring_tone_policy || 'FAKE_RINGING' }}</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownRingTonePolicy">
+        <button ngbDropdownItem *ngFor="let option of ringTonePolicyOptions"
+        (click)="setRingTonePolicy(option)">{{option}}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4 col-md-12">
+    <div class="col-12 px-0 temporaryRoutingNumber" *ngIf="queue.show_override">
+      <label>Temporært ruting-nummer:</label><br />
+      <div class="row">
+        <div class="col-md-1">
+          <div class="btn text-left" [ngClass]="{'active': overrideActive}" (click)="overrideActive = true">
+            <input type="radio" name="queueMember" value="0" [checked]="overrideActive" />
+          </div>
+        </div>
+        <div class="col-md-10">
+          <input type="tel" class="form-control" id="overrideNumber" [ngModel]="overrideNumber"
+            (ngModelChange)="setOverrideNumber($event)" [ngClass]="{'form-invalid': overrideNumberValidity().length}" />
+          <div *ngIf="overrideNumberValidity() == 'INVALID'" class="invalid">Ugyldig tegn</div>
+          <div *ngIf="overrideNumberValidity() == 'TOO_SHORT'" class="invalid">For få siffer</div>
+          <div *ngIf="overrideNumberValidity() == 'MISSING_NUMBER'" class="invalid">Nummer må fylles ut først</div>
+        </div>
+      </div>
+    </div>
+
+    <input type="hidden" class="form-control" id="overrideNumber" [ngModel]="overrideNumber"
+      (ngModelChange)="setOverrideNumber($event)" [ngClass]="{'form-invalid': overrideNumberValidity().length}" />
+
+    <div class="col-12 px-0">
+      <label>Aktivt ruting-nummer: </label>
+      <div class="activeRoutingNumber">
+        <table>
+          <tbody>
+            <ng-container
+              *ngFor="let member of queue.queue_member_list; let idx = index; let isEven = even; let isOdd = odd">
+              <tr [ngClass]="{'active': !overrideActive && member.active, 'even': isEven, 'odd': isOdd}"
+                (click)="setActiveQueueMember(idx)">
+                <td>
+                  <form class="form-inline">
+                    <input type="radio" name="queueMember" value="member.id"
+                      [checked]="!overrideActive && member.active" (change)="setActiveQueueMember(idx)" />
+                  </form>
+                </td>
+                <td>
+                  {{ member.destination_number }}
+                </td>
+                <td>
+                  {{ member.description }}
+                </td>
+              </tr>
+              <tr class="spacer"></tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row" *ngIf="!queue.busy_mid && user.isAdmin()">
+
+  <div class="col-md-4">
+    <label>Avspillingstype når opptatt: </label>
+    <br />
+    <div [(ngModel)]="queue.busy_recording_type" ngbRadioGroup>
+      <form class="form-inline">
+      <label ngbButtonLabel class="btn btn-primary">
+        <input class="input-radio-margin" ngbButton type="radio" value="true"> Brukerdefinert
+      </label>
+      <label style="margin-left: 5px" ngbButtonLabel class="btn btn-primary">
+        <input class="input-radio-margin" ngbButton type="radio" value="false"> Automatisk
+      </label>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="user.isAdmin();" class="row" style="padding:10px 0px">
+  <div class="col">
+    <ngb-accordion>
+      <ngb-panel title="Kømedlemmer">
+        <ng-template ngbPanelContent>
+
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Beskrivelse</th>
+                <th>Destinasjonsnummer</th>
+                <th>Aktiv</th>
+                <th>Timeout</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let member of queue.queue_member_list; let memberIndex = index">
+                <td>{{ member.queue_member_id }}</td>
+                <td>
+                  <input class="form-control" [(ngModel)]="member.description" placeholder="beskrivelse" />
+                </td>
+                <td>
+                  <input class="form-control" [(ngModel)]="member.destination_number"
+                    placeholder="destinasjonsnummer" />
+                </td>
+                <td>{{ member.active ? 'Ja' : 'Nei' }}</td>
+                <td>
+                  <input class="form-control" [(ngModel)]="member.ringing_timeout" placeholder="timeout" />
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="deleteQueueMember(memberIndex)">Fjern</button>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6">
+                  <button type="button" class="btn btn-primary" (click)="createNewMember()">Legg til</button>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+
+</div>
+
+<hr>
+<div class="row">
+  <div class="col-md-2">
+    <button onmousedown="event.preventDefault()" class="btn btn-primary" type="submit" (click)=saveModule()
+      [ngClass]="{'btn-saved': buttonAnimations.saved, 'btn-saved-error': buttonAnimations.error}">
+      Lagre
+    </button>
+  </div>
+</div>

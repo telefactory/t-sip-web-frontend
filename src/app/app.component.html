@@ -1,0 +1,82 @@
+<div class="container">
+
+    <!-- Navigation -->
+    <div class="row">
+        <div class="col">
+
+            <nav class="navbar navbar-dark bg-faded">
+                <a class="navbar-brand" href="/home">
+                    <img src="../assets/telefactory_logo_small.png" width="85" height="30" alt="Telefactory logo">
+                </a>
+
+                <div class="collapse navbar-collapse d-flex flex-row justify-content-between" id="navbarToggler">
+
+                    <ul class="nav p-2">
+                        <li *ngIf="!user?.isAdmin() && getCustomer() !== undefined && user?.show_statistics"
+                            class="nav-item" routerLinkActive="active">
+                            <a class="nav-link" [routerLink]="['/stats', {customerId: getCustomer()}]">Statistikk</a>
+                        </li>
+                        <li *ngIf="user?.isAdmin()" class="nav-item" routerLinkActive="active">
+                            <a class="nav-link" routerLink="/user-admin">Brukeradmin</a>
+                        </li>
+                        <li *ngIf="user?.isAdmin()" class="nav-item" routerLinkActive="active">
+                            <a class="nav-link" routerLink="/customer-admin">Kundeadmin</a>
+                        </li>
+                        <li *ngIf="!user?.isAdmin() && getCustomer() !== undefined" class="nav-item"
+                            routerLinkActive="active">
+                            <a class="nav-link" [routerLink]="['/customer', {id: getCustomer()}]">Innstillinger</a>
+                        </li>
+                        <li *ngIf="!user?.isAdmin() && getCustomer() !== undefined && user?.user_manual_type"
+                            class="nav-item" routerLinkActive="active">
+                            <a class="nav-link userManual" routerLink="/user-manual">Brukerveiledning</a> <a
+                                routerLink="/user-manual/video" *ngIf="user?.user_manual_show_video"><img
+                                    src="../assets/icons/video.gif" /></a>
+                        </li>
+                    </ul>
+
+                    <div class="p-2">
+                        <div *ngIf="!user" (keyup.enter)="login()">
+                            <input class="form-control mr-sm-2" [(ngModel)]="username" type="text"
+                                placeholder="Brukernavn">
+                            <input class="form-control mr-sm-2" [(ngModel)]="password" type="password"
+                                placeholder="Passord">
+                            <button class="btn btn-sm btn-primary my-2 my-sm-0" type="submit" (click)="login()">Logg
+                                inn
+                            </button>
+                        </div>
+                        <div *ngIf="user" class="form-inline">
+                            <div style="padding: 0px 5px">Bruker: {{user.username}}</div>
+                            <button class="btn btn-sm btn-primary my-2 my-sm-0" type="submit" (click)="logout()">Logg
+                                ut
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </nav>
+            <div *ngIf="!authenticationFlag">
+                <div class="alert alert-danger" role="alert"> Feil brukernavn eller passord</div>
+            </div>
+
+
+            <!-- /Navigation -->
+
+            <!-- Page content -->
+            <router-outlet></router-outlet>
+            <!-- /Page content -->
+
+            <footer>
+                <div class="attribution clearfix">
+                    <div class="float-left">
+                        &copy; {{ today | date: 'yyyy' }}
+                        <a class="logo-font" href="http://www.telefactory.no" target="_blank">Telefactory AS</a>
+                    </div>
+                    <div class="float-right">
+                        Versjon <span>{{ version }}</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>

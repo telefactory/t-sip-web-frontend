@@ -1,0 +1,17 @@
+
+/* Add some space under menu */
+.navbar {
+  margin-bottom: 10px;
+}
+
+footer {
+  margin-top: 10px;
+}
+
+.nav-link {
+  display: inline-block;
+}
+
+.nav-link.userManual {
+  padding: .5rem 0 .5rem 1rem;
+}

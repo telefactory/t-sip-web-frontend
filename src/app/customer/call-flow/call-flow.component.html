@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col">
+
+    <ngb-accordion activeIds="cfpanel">
+      <ngb-panel id="cfpanel" *ngFor="let module of connectedModules">
+        <ng-template ngbPanelTitle>
+          <span [ngSwitch]="module.table_name">
+            <span *ngSwitchCase="'Announcement'">Talebeskjed</span>
+            <span *ngSwitchCase="'RouteCall'">Viderekobling</span>
+            <span *ngSwitchCase="'Schedule'">Timeplan</span>
+            <span *ngSwitchCase="'Queue'">Ruting</span>
+            <span *ngSwitchCase="'HuntGroup'">Ringeliste</span>
+            <span *ngSwitchDefault>{{module.table_name}}</span>
+          </span>
+        </ng-template>
+
+        <ng-template *ngIf="callFlow" ngbPanelContent>
+
+          <div *ngIf="saveFlag">
+            <div class="alert alert-success" role="alert"> Endringene er lagret</div>
+          </div>
+
+          <ngb-accordion *ngIf="user.isSuperAdmin()">
+            <ngb-panel title="JSON" >
+              <ng-template ngbPanelContent>
+                <pre>{{ module | json }}</pre>
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
+
+          <div *ngIf="module.table_name == 'Announcement'">
+            <app-announcement [callFlow]="callFlow" [announcement]="module.data" [module]="module"></app-announcement>
+          </div>
+
+          <div *ngIf="module.table_name == 'RouteCall'">
+            <app-route-call [callFlow]="callFlow" [routeCall]="module.data" [module]="module"></app-route-call>
+          </div>
+
+          <div *ngIf="module.table_name == 'Schedule'">
+            <app-schedule [callFlow]="callFlow" [schedule]="module.data" [module]="module"></app-schedule>
+          </div>
+
+          <div *ngIf="module.table_name == 'Queue'">
+            <app-queue [callFlow]="callFlow" [queue]="module.data" [module]="module"></app-queue>
+          </div>
+
+          <div *ngIf="module.table_name == 'HuntGroup'">
+            <app-huntgroup [callFlow]="callFlow" [huntGroup]="module.data" [module]="module"></app-huntgroup>
+          </div>
+
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+
+  </div>
+</div>

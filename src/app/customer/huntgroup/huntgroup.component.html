@@ -1,0 +1,308 @@
+<nav>
+    <ngb-tabset [destroyOnHide]="false">
+        <ngb-tab title="Main">
+            <ng-template ngbTabContent>
+                <div class="settings huntgroup-manager">
+                    <div class="row">
+                        <table class="huntgroup-manager">
+                            <tbody>
+                                <tr *ngIf="huntGroup.strategy == 'CIRCULAR'">
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="">Timeout:</label>
+                                            <input type="text" name="" class="form-control"
+                                                [ngModel]="huntGroup.ringingTimeout"
+                                                (ngModelChange)="changeRingingTimeout($event)" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="no-padding-top no-padding-bottom">
+                                        <div class="form-group no-margin-bottom">
+                                            <label for="">Velg aktiv liste:</label>
+                                            <select name="" class="form-control"
+                                                [ngClass]="{'active': isActive() == 'list', 'inactive': isActive() != 'list'}"
+                                                [(ngModel)]="activeList">
+                                                <option value="null">Ingen</option>
+                                                <option *ngFor="let list of sortedLists" [ngValue]="list">
+                                                    {{ list.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="activeList">
+                                    <td class="no-padding-top">
+                                        <div class="activeRoutingNumber">
+                                            <table *ngIf="activeHgListMembers.length > 0">
+                                                <thead>
+                                                    <tr>
+                                                        <td> Aktiv </td>
+                                                        <td>Nummer</td>
+                                                        <td>Navn</td>
+                                                        <td>Timeout</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <ng-container
+                                                        *ngFor="let member of activeHgListMembers; let isEven = even; let isOdd = odd">
+                                                        <tr [ngClass]="{'even': isEven, 'odd': isOdd}">
+                                                            <td>
+                                                                <input type="radio"
+                                                                    name="activeHgListMember_{{ member.hunt_group_member_id }}"
+                                                                    [checked]="member.active" disabled="disabled" />
+                                                            </td>
+                                                            <td class="destinationNumber"
+                                                                [ngClass]="{'break': member.destination_number.length > 8}">
+                                                                {{ member.destination_number }}
+                                                            </td>
+                                                            <td>
+                                                                <span
+                                                                    class="d-none d-md-block">{{ member.description }}</span>
+                                                                <span
+                                                                    class="d-xs-block d-md-none">{{ getDescription(member) }}</span>
+                                                            </td>
+                                                            <td>
+                                                                {{ member.ringTimeout }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="spacer"></tr>
+                                                    </ng-container>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="padding-top-5">
+                                        <div class="form-group">
+                                            <label for="">Velg aktivt nummer:</label>
+                                            <select name="" class="form-control"
+                                                [ngClass]="{'active': isActive() == 'number', 'inactive': isActive() != 'number'}"
+                                                [(ngModel)]="activeMember">
+                                                <option value="null">Ingen</option>
+                                                <option class="d-none d-md-block" *ngFor="let member of listsMembers"
+                                                    [ngValue]="member">{{ member.description }}
+                                                    ({{ member.destination_number }})
+                                                </option>
+                                                <option class="d-xs-block d-md-none" *ngFor="let member of listsMembers"
+                                                    [ngValue]="member">{{ getDescription(member) }}
+                                                    ({{ member.destination_number }})</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="">Temporært ruting-nummer:</label>
+                                            <input type="text" name="" class="form-control"
+                                                [ngClass]="{'active': isActive() == 'temporary', 'inactive': isActive() != 'temporary'}"
+                                                [ngModel]="huntGroup.override_destination"
+                                                (ngModelChange)="changeOverrideDestination($event)"
+                                                style="width: 100%;" />
+                                            <div>
+                                                <span *ngIf="overrideDestinationError == 'TOO_SHORT'">For få
+                                                    siffer</span>
+                                                <span *ngIf="overrideDestinationError == 'INVALID'">Ugyldig tegn</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Lister">
+            <ng-template ngbTabContent>
+                <div class="form-group top-margin">
+                    <div>Opprett ny liste:</div>
+                    <div class="my-1 my-sm-1 input-group" style="max-width: 400px;">
+                        <input class="form-control" placeholder="Navn" [(ngModel)]="newListName" />
+                        <p *ngIf="!addListValid && validityChecked">Du må fylle inn et navn</p>
+                        <span class="input-group-btn">
+                            <button class="form-control btn btn-primary input-btn" (click)="addNewList()"
+                                [ngClass]="{'invalid': !addListValid}">Ny liste</button>
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div>Velg liste:</div>
+                        <div class="my-1 my-sm-1 input-group" style="max-width: 380px;" *ngIf="lists.length > 0">
+                            <select class="form-control" [(ngModel)]="selectedList">
+                                <option *ngFor="let list of sortedLists" [ngValue]="list">{{ list.name }}</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="form-control btn btn-danger input-btn"
+                                    (click)="deleteList()">Slett</button>
+                            </span>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td>Nummer</td>
+                                    <td>Navn</td>
+                                    <td class="d-none d-md-table-cell timeout">Timeout</td>
+                                    <td class="arrows d-none d-md-table-cell">Sekvens</td>
+                                    <td>Aktiv</td>
+                                    <td class="d-none d-md-table-cell">&nbsp;</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let member of activeListMembers; let $first = first; let $last = last">
+                                    <td class="destinationNumber"
+                                        [ngClass]="{'break': getMember(member).destination_number.length > 8}">
+                                        {{ getMember(member).destination_number }}
+                                    </td>
+                                    <td>
+                                        <span class="d-none d-md-block">{{ getMember(member).description }}</span>
+                                        <span
+                                            class="d-xs-block d-md-none">{{ getDescription(getMember(member)) }}</span>
+                                    </td>
+                                    <td class="d-none d-md-table-cell">
+                                        <input type="number" name="" [ngModel]="ringTimeout(member)"
+                                            (ngModelChange)="setRingTimeout(member, $event)" class="form-control" />
+                                    </td>
+                                    <td class="arrows d-none d-md-table-cell">
+                                        <span class="float-left" *ngIf="!$first"
+                                            (click)="moveActiveListMemberUp(member)">
+                                            &#x21E7;
+
+                                        </span>
+                                        <span class="float-right" *ngIf="!$last"
+                                            (click)="moveActiveListMemberDown(member)">
+                                            &#x21E9;
+
+                                        </span>
+                                    </td>
+                                    <td class="center middle">
+                                        <input type="checkbox" value="1" (click)="setActiveListMemberActive(member)"
+                                            [ngModel]="getActiveListMemberActive(member)" />
+                                    </td>
+                                    <td class="center middle d-none d-md-table-cell smaller-padding">
+                                        <button class="btn btn-danger form-control"
+                                            (click)="deleteMember(member)">Slett</button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="activeListMembers?.length == 0">
+                                    <td colspan="6" class="center">
+                                        Ingen personer er lagt til i denne listen enda.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="top-margin">Legg til nytt medlem:</div>
+                        <div class="my-1 my-sm-1 input-group" style="max-width: 400px;">
+                            <select class="form-control" [(ngModel)]="addNewMember">
+                                <option [ngValue]="null">Velg</option>
+                                <option *ngFor="let member of sortedNotSelectedMembers" [ngValue]="member">
+                                    {{ member.description }}
+                                </option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="form-control btn btn-primary input-btn" (click)="runAddNewMember()">Legg
+                                    til</button></span>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Nummer">
+            <ng-template ngbTabContent>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        Nummer
+                                    </td>
+                                    <td>
+                                        Navn
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf="newMemberError" class="invalid">
+                                    <td colspan="4">
+                                        <span *ngIf="newMemberError == 'MISSING_FIELDS'">Du må fylle inn et nummer og et
+                                            navn</span>
+                                        <span *ngIf="newMemberError == 'TOO_SHORT'">For få siffer</span>
+                                        <span *ngIf="newMemberError == 'INVALID'">Ugyldig tegn</span>
+                                        <span *ngIf="newMemberError == 'NUMBER_ALREADY_USED'">Dette nummeret er allerede
+                                            i
+                                            bruk</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="tel" class="form-control"
+                                            [(ngModel)]="newMember.destination_number"
+                                            (ngModelChange)="changeNewMember()" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" [(ngModel)]="newMember.description"
+                                            (ngModelChange)="changeNewMember()" />
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary form-control" (click)="createNewMember()">Legg
+                                            til</button>
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let member of listsMembers">
+                                    <td>
+                                        <input type="tel" class="form-control" [(ngModel)]="member.destination_number"
+                                            (ngModelChange)="changeMember(member)" />
+                                        <span *ngIf="getError(member, 'number') == 'MISSING_NUMBER'">Du må fylle inn et
+                                            nummer</span>
+                                        <span *ngIf="getError(member, 'number') == 'TOO_SHORT'">For få siffer</span>
+                                        <span *ngIf="getError(member, 'number') == 'INVALID'">Ugyldig tegn</span>
+                                        <span *ngIf="getError(member, 'number') == 'NUMBER_ALREADY_USED'">Dette nummeret
+                                            er
+                                            allerede
+                                            i bruk</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" [(ngModel)]="member.description"
+                                            (ngModelChange)="changeMember(member)" />
+                                        <span *ngIf="getError(member, 'description') == 'MISSING_DESCRIPTION'">Du må
+                                            fylle
+                                            inn et
+                                            navn</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger form-control"
+                                            (click)="removeMember(member)">Slett</button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="listsMembers?.length == 0">
+                                    <td colspan="4">
+                                        Ingen nummer er lagt til.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+</nav>
+
+<hr>
+<div class="row">
+    <div class="col-md-2">
+        <button onmousedown="event.preventDefault()" class="btn btn-primary" type="submit" (click)=saveModule() [ngClass]="{'btn-saved': buttonAnimations.saved, 'btn-saved-error': buttonAnimations.error}">
+            Lagre
+        </button>
+    </div>
+</div>

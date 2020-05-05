@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col">
+    <table *ngIf="customerList" class="table table-striped">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Kundenavn</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let customer of customerList">
+        <td>{{ customer.customer_id }}</td>
+        <td>{{ customer.customer_name }}</td>
+        <td>
+          <a [routerLink]="['/stats', {customerId: customer.customer_id}]">Stats</a>
+          <a style="margin-left: 3px" [routerLink]="['/customer', {id: customer.customer_id}]">Endre</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="button-box col-lg-12">
+    <button class="btn btn-primary" href="/customer">Ny kunde</button>
+  </div>
+</div>

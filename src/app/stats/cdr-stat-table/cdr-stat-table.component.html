@@ -1,0 +1,117 @@
+<h5 *ngIf="label">{{label}}</h5>
+
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Periode</th>
+        <th>Inn</th>
+        <th class="d-none d-sm-table-cell">Stengt</th>
+        <th>Ut</th>
+        <th>Besvart</th>
+        <th class="d-none d-sm-table-cell">Ubesvart</th>
+        <th class="d-none d-sm-table-cell">Opptatt</th>
+        <th class="d-none d-sm-table-cell">Kø</th>
+        <th>Minutter</th>
+        <th class="d-none d-sm-table-cell">Snitt</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td>Idag</td>
+        <td>{{ cdrStats.day.offeredIncoming }}</td>
+        <td class="d-none d-sm-table-cell">{{ cdrStats.day.count_closed }}</td>
+        <td>{{ cdrStats.day.offeredOutgoing }}</td>
+        <td>{{ cdrStats.day.answered }}</td>
+        <td class="d-none d-sm-table-cell">{{ cdrStats.day.unAnswered }}</td>
+        <td class="d-none d-sm-table-cell">{{ cdrStats.day.count_busy }}</td>
+        <td class="d-none d-sm-table-cell">{{ cdrStats.day.count_queue_busy }}</td>
+        <td>{{ cdrStats.day.minutes }}</td>
+        <td class="d-none d-sm-table-cell">{{ cdrStats.day.average }}</td>
+      </tr>
+      <ng-container *ngIf="cdrStats.yesterday">
+        <tr>
+          <td>Igår</td>
+          <td>{{ cdrStats.yesterday.offeredIncoming }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.yesterday.count_closed }}</td>
+          <td>{{ cdrStats.yesterday.offeredOutgoing }}</td>
+          <td>{{ cdrStats.yesterday.answered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.yesterday.unAnswered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.yesterday.count_busy }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.yesterday.count_queue_busy }}</td>
+          <td>{{ cdrStats.yesterday.minutes }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.yesterday.average }}</td>
+        </tr>
+      </ng-container>
+      <ng-container *ngIf="cdrStats.week">
+        <tr>
+          <td>Uke</td>
+          <td>{{ cdrStats.week.offeredIncoming }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.week.count_closed }}</td>
+          <td>{{ cdrStats.week.offeredOutgoing }}</td>
+          <td>{{ cdrStats.week.answered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.week.unAnswered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.week.count_busy }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.week.count_queue_busy }}</td>
+          <td>{{ cdrStats.week.minutes }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.week.average }}</td>
+        </tr>
+      </ng-container>
+      <ng-container *ngIf="cdrStats.lastweek">
+        <tr>
+          <td>Uke-1</td>
+          <td>{{ cdrStats.lastweek.offeredIncoming }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastweek.count_closed }}</td>
+          <td>{{ cdrStats.lastweek.offeredOutgoing }}</td>
+          <td>{{ cdrStats.lastweek.answered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastweek.unAnswered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastweek.count_busy }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastweek.count_queue_busy }}</td>
+          <td>{{ cdrStats.lastweek.minutes }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastweek.average }}</td>
+        </tr>
+      </ng-container>
+      <ng-container *ngIf="cdrStats.month">
+        <tr>
+          <td>Mnd</td>
+          <td>{{ cdrStats.month.offeredIncoming }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.month.count_closed }}</td>
+          <td>{{ cdrStats.month.offeredOutgoing }}</td>
+          <td>{{ cdrStats.month.answered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.month.unAnswered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.month.count_busy }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.month.count_queue_busy }}</td>
+          <td>{{ cdrStats.month.minutes }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.month.average }}</td>
+        </tr>
+      </ng-container>
+      <ng-container *ngIf="cdrStats.lastmonth">
+        <tr>
+          <td>Mnd-1</td>
+          <td>{{ cdrStats.lastmonth.offeredIncoming }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastmonth.count_closed }}</td>
+          <td>{{ cdrStats.lastmonth.offeredOutgoing }}</td>
+          <td>{{ cdrStats.lastmonth.answered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastmonth.unAnswered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastmonth.count_busy }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastmonth.count_queue_busy }}</td>
+          <td>{{ cdrStats.lastmonth.minutes }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastmonth.average }}</td>
+        </tr>
+      </ng-container>
+      <ng-container *ngIf="cdrStats.lastyearmonth && !user.hide_yearly_statistics">
+        <tr>
+          <td>Mnd-13</td>
+          <td>{{ cdrStats.lastyearmonth.offeredIncoming }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastyearmonth.count_closed }}</td>
+          <td>{{ cdrStats.lastyearmonth.offeredOutgoing }}</td>
+          <td>{{ cdrStats.lastyearmonth.answered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastyearmonth.unAnswered }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastyearmonth.count_busy }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastyearmonth.count_queue_busy }}</td>
+          <td>{{ cdrStats.lastyearmonth.minutes }}</td>
+          <td class="d-none d-sm-table-cell">{{ cdrStats.lastyearmonth.average }}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>

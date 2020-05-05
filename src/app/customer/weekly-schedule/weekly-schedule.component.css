@@ -1,0 +1,67 @@
+table tr td.center, table tr th.center {
+    text-align: center;
+}
+
+table tr td select.form-control.weekly-schedule {
+    min-width: 85px;
+    padding: 0 5px;
+    height: calc(1.7rem + 2px);
+}
+
+table tr td select.form-control.weekly-schedule.automatic {
+    min-width: none;
+    width: auto;
+}
+
+.blue-bg {
+    background-color: #afccf4
+}
+
+.yellow-bg {
+    background-color: lightgray;
+}
+
+table tr.add-border td {
+    border-top: 1px solid #999;
+}
+
+table tr.today td {
+    background: #bcf4b8;
+}
+table tr.today.closed td {
+    background: #edc065;
+}
+
+table tr td.vertical-align{
+    vertical-align: middle;
+}
+
+.padding {
+    padding: 3px;
+}
+
+.padding-lr {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+ }
+
+.nextOpeningMessage {
+    margin: 0 0 0 0;
+}
+
+.nextOpeningMessage input[type="checkbox"] {
+    width: auto;
+    height: auto;
+    margin: 5px 5px 0 0;
+    display: inline-block;
+}
+
+.openingInfo a.updateOpeningInfo {
+    padding-left: 40px;
+    text-decoration: underline;
+}

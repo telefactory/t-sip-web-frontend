@@ -1,0 +1,43 @@
+@media only screen and (min-width: 992px) {
+    .openingInfo {
+        margin-left: 105px;
+    }
+}
+
+
+
+.updateOpeningInfo {
+    text-decoration: underline!important;
+}
+
+.form-check {
+    margin: 3px 0;
+}
+
+.nextOpeningAlertNumber {
+    max-width: 160px;
+    display: inline-block;
+    height: 30px;
+    margin-left: 5px;
+}
+
+.button-spacing {
+    margin-left: 5px;
+}
+
+.form-invalid {
+    border-color: #dc3545;
+}
+
+div.invalid {
+    margin-top: 10px;
+    color: red;
+}
+
+input[type="radio"][name="ms-radio"]{
+    transform: scale(1.3);
+}
+
+.row.padding-top {
+    padding: 15px 0 0 0;
+}

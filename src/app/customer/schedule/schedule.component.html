@@ -1,0 +1,136 @@
+<div class="row">
+  <div class="col-md-12">
+    <label>Timeplantype: </label>
+  </div>
+
+  <div ngbDropdown class="d-inline-block">
+    <button class="btn btn-primary" id="dropdownScheduleType" ngbDropdownToggle>{{getScheduleType()}}</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownScheduleType">
+      <button ngbDropdownItem *ngFor="let scheduleType of scheduleTypes"
+      (click)="setScheduleType(scheduleType)">{{scheduleType}}</button>
+    </div>
+  </div>
+</div>
+
+<div class="row padding-top">
+
+  <div *ngIf="this.scheduleType == 'MANUAL'" class="col-xl-4">
+    <label>Åpningsstatus: </label>
+    <br />
+    <div class="btn-group-lg">
+      <label class="btn-lg btn-success">
+        <input type="radio" name="ms-radio" value="OPEN" [(ngModel)]="manualState"> Åpen
+      </label>
+      <label class="btn-lg btn-danger button-spacing">
+        <input type="radio" name="ms-radio" value="CLOSED" [(ngModel)]="manualState"> Stengt
+      </label><br />
+    </div>
+
+    <div class="openingInfo" *ngIf="manualState == 'CLOSED'">
+      Stengt Tid: {{ changeDate | date : "dd.MM HH:mm" }}<br />
+      Tapte anrop: {{ missedCallsSinceClosed }}<br />
+      <a class="updateOpeningInfo" (click)="updateOpeningInfo()">Oppdater tapte anrop</a>
+    </div>
+  </div>
+
+  <div *ngIf="this.scheduleType == 'MANUAL' && manualState == 'CLOSED'" class="col-xl-4">
+    <label>Neste åpningstid:</label>
+    <br />
+    <app-date-picker [target]="this" [minDate]="minimumDate" [maxDate]="maximumDate" [startDate]="startDate"
+      [function]="'setOpeningDate'"></app-date-picker>
+    <div class="d-none d-sm-none d-md-none d-lg-none d-xl-block">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="nextOpeningMessage" value="1"
+          [(ngModel)]="nextOpeningMessage" />
+        <label for="nextOpeningMessage" class="form-check-label">
+          Spille talemelding
+        </label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="nextOpeningAutoOpen" value="1"
+          [(ngModel)]="nextOpeningAutoOpen" />
+        <label for="nextOpeningAutoOpen" class="form-check-label">
+          Automatisk åpne
+        </label>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="nextOpeningAlert" value="1" [(ngModel)]="nextOpeningAlert"
+          (click)="preventDefault($event)" />
+        <label for="nextOpeningAlert" class="form-check-label">
+          Varsling til:
+        </label>
+        <input type="tel" class="form-control nextOpeningAlertNumber" [ngModel]="nextOpeningAlertNumber"
+          (ngModelChange)="setNextOpeningAlertNumber($event)"
+          [ngClass]="{'form-invalid': nextOpeningAlertNumberValidity().length}" />
+      </div>
+    </div>
+    <div *ngIf="dateValidity() == 'PAST'" class="invalid">Datoen eller tidspunktet du har valgt er ugyldig. Velg en dato frem i tid.</div>
+    <div *ngIf="nextOpeningAlertNumberValidity() == 'INVALID'" class="invalid">Ugyldig tegn</div>
+    <div *ngIf="nextOpeningAlertNumberValidity() == 'TOO_SHORT'" class="invalid">For få siffer</div>
+    <div *ngIf="nextOpeningAlertNumberValidity() == 'MISSING_NUMBER'" class="invalid">Nummer må fylles ut først</div>
+  </div>
+
+  <div *ngIf="this.scheduleType == 'MANUAL' && manualState == 'CLOSED'" class="col-xl-2">
+    <app-time-picker [target]="this" [property]="'nextOpeningTime'" [function]="'setOpeningTime'" hour="08" minute="00">
+    </app-time-picker>
+  </div>
+</div>
+
+<div *ngIf="this.scheduleType == 'MANUAL' && manualState == 'CLOSED'" class="row d-xl-none">
+  <div class="col-xs-12 col-sm-12">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="nextOpeningMessage" value="1"
+        [(ngModel)]="nextOpeningMessage" />
+      <label for="nextOpeningMessage" class="form-check-label">
+        Spille talemelding
+      </label>
+    </div>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="nextOpeningAutoOpen" value="1"
+        [(ngModel)]="nextOpeningAutoOpen" />
+      <label for="nextOpeningAutoOpen" class="form-check-label">
+        Automatisk åpne
+      </label>
+    </div>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="nextOpeningAlert" [(ngModel)]="nextOpeningAlert"
+        (click)="preventDefault($event)" />
+      <label for="nextOpeningAlert" class="form-check-label">
+        Varsling til:
+      </label>
+      <input type="tel" class="form-control nextOpeningAlertNumber" [ngModel]="nextOpeningAlertNumber"
+        (ngModelChange)="setNextOpeningAlertNumber($event)"
+        [ngClass]="{'form-invalid': nextOpeningAlertNumberValidity().length}" />
+      <div *ngIf="nextOpeningAlertNumberValidity() == 'INVALID'" class="invalid">Ugyldig tegn</div>
+      <div *ngIf="nextOpeningAlertNumberValidity() == 'TOO_SHORT'" class="invalid">For få siffer</div>
+      <div *ngIf="nextOpeningAlertNumberValidity() == 'MISSING_NUMBER'" class="invalid">Nummer må fylles ut først</div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div *ngIf="user.isAdmin()" class="col-md-12">
+    <label>Varsle innringer ved åpning: </label>
+    <form class="form-inline">
+      <label class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="open-radio" [value]="true" [(ngModel)]="schedule.alert_caller_on_open"> Ja
+      </label>
+      <label class="btn btn-primary" style="margin-left: 5px">
+        <input class="input-radio-margin" type="radio" name="open-radio" [value]="false" [(ngModel)]="schedule.alert_caller_on_open"> Nei
+      </label>
+    </form>
+  </div>
+</div>
+
+<app-weekly-schedule *ngIf="schedule.schedule_type == 'WEEKLY'" [schedule]="schedule" [callFlow]="callFlow"></app-weekly-schedule>
+
+<hr>
+<div class="row">
+  <div class="col-md-2">
+    <button onmousedown="event.preventDefault()" class="btn btn-primary" type="submit"
+    [disabled]="buttonDisabled" [ngClass]="{'btn-saved': buttonAnimations.saved, 'btn-saved-error': buttonAnimations.error}"
+      (click)=saveModule()>
+      Lagre
+    </button>
+  </div>
+</div>

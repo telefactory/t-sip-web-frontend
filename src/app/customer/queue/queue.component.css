@@ -1,0 +1,58 @@
+.temporaryRoutingNumber {
+    margin-bottom: 10px;
+}
+
+.temporaryRoutingNumber .btn {
+    cursor: pointer;
+    background-color: none;
+    background-color: #404040;
+    padding: 2px 10px;
+    text-align: left;
+}
+
+.temporaryRoutingNumber .btn.active {
+    background-color: #28a745;
+}
+
+.temporaryRoutingNumber .btn.active:hover {
+    background-color: #218838;
+    -webkit-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+}
+
+#overrideNumber {
+    max-width: 160px;
+    display: inline-block;
+    height: 27px;
+    margin-left: 10px;
+}
+
+.form-invalid {
+    border-color: #dc3545;
+}
+
+div.invalid {
+    display: block;
+    clear: both;
+    padding-left: 10px;
+    color: #dc3545;
+}
+
+.temporaryRoutingNumber .row {
+    padding: 0;
+    margin-left: 0px;
+}
+
+.temporaryRoutingNumber .col-md-1{
+    width: 30px;
+    max-width: 30px;
+}
+
+.temporaryRoutingNumber .col-md-10{
+    width: 160px;
+    max-width: 160px;
+}
+
+.temporaryRoutingNumber div[class^="col-md-"] {
+    padding: 0;
+}

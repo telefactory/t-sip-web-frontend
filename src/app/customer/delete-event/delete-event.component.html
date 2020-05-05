@@ -1,0 +1,14 @@
+
+<div class="modal-header">
+  <h4 class="modal-title">{{day}} {{start}}&ndash;{{end}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close(false)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>Ønsker du å slette denne oppføringen i timeplanen?</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="activeModal.close(true)">Ja</button>
+  <button type="button" class="btn btn-primary" (click)="activeModal.close(false)">Nei</button>
+</div>

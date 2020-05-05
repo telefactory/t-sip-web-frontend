@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-md-12 p-2">
+    <button class="btn btn-primary btn-block margin-bottom-15 updateStatistics" [disabled]="this.loadingStatistics"
+      (click)="updateStatistics(true)">
+      Oppdater statistikk
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col p-2">
+    <p>Velkommen til den nye utvidede statistikken. Se beskrivelse i bunnen av siden.</p>
+    <p class="d-sm-none small"><em>Roter telefonen til landskapsmodus for å se fullstendig statistikk</em></p>
+  </div>
+</div>
+
+<div class="row">
+  <ng-container *ngIf="user.isAgent()">
+    <div *ngFor="let number of this.numberList" class="col-sm-12 col-md-12 col-xl-6">
+      <div class="p-2">
+        <app-cdr-stat-table [label]="number" [cdrStats]="getStatsForNumber(number)" [user]="user">
+        </app-cdr-stat-table>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="user.isCustomer() || user.isAdmin()">
+    <ng-container *ngFor="let sg of getFilteredServiceGroups()">
+      <div class="col-sm-12 col-md-12 col-xl-6 p-2">
+        <h3 *ngIf="user.show_dynamic_service_groups">{{sg.description}}</h3>
+        <div *ngFor="let service of sg.number_list">
+          <app-cdr-stat-table [label]="service.description + ' - ' + service.service_number"
+            [cdrStats]="getStatsForNumber(service.service_number)" [user]="user">
+          </app-cdr-stat-table>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+</div>
+
+<div *ngIf="cdrStats && this.serviceGroups.length >= 1" class="row">
+  <div class="col-sm-12 col-md-12 col-xl-6 p-2">
+    <h3 *ngIf="user.show_dynamic_service_groups">Alle</h3>
+    <h5 *ngIf="!user.show_dynamic_service_groups">Alle</h5>
+      <app-cdr-stat-table [cdrStats]="getAllStats()" [user]="user">
+      </app-cdr-stat-table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col p-2">
+    <p>Beskrivelse</p>
+
+    <p class="small"><em>Uke - Hittil denne uken, Uke-1 er hele forrige Uke. Det samme gjelder for Mnd og Mnd-1</em><br>
+      <em>Mnd-13 - Forrige måned for 1 år siden.</em><br>
+      <em>Inn - Totalt antall anrop til teletorgnummeret.</em><br>
+      <em>Stengt - Antall anrop mens tjenesten er stengt.</em><br>
+      <em>Ut - Antall anrop som ble vidresent til rutingnummeret.</em><br>
+      <em>Besvart - Antall besvarte samtaler.</em><br>
+      <em>Ubesvart - Antall anrop som ble vidresendt men ikke besvart.</em><br>
+      <em>Opptatt - Antall vidresendte anrop hvor rutingnummeret var opptatt evt feil på linja.</em><br>
+      <em>Kø - Antall anrop mens tjenesten allerede var opptatt.</em><br>
+      <em>Minutter - Antall minutter samtaletid for perioden.</em><br>
+      <em>Snitt - Gjennomsnitt av antall minutter samtaletid for perioden.</em><br>
+      <p>Dersom du har forslag eller komentarer til statistikken, send en epost til sven.evensen@telefactory.no</p>
+  </div>
+</div>
+
+<div class="row"
+  [ngClass]="{ 'd-block': this.numberList.length >= 4, 'd-sm-none': this.numberList.length >= 2 && this.numberList.length <= 4 }">
+  <div class="col-md-12 p-2">
+    <button class="btn btn-primary btn-block updateStatistics" [disabled]="this.loadingStatistics"
+      (click)="updateStatistics(true)">
+      Oppdater statistikk
+    </button>
+  </div>
+</div>

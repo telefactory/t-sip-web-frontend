@@ -1,0 +1,14 @@
+table tr:nth-of-type(even){
+    background-color: lightgray;
+}
+
+.table td, th {
+    text-align: right;   
+ }
+
+ .table td:not(:first-child) {
+     font-family: monospace;
+     font-size: 16px;
+ }
+
+ 

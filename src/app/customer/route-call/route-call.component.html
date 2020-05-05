@@ -1,0 +1,54 @@
+
+<div class="row">
+  <div class="col-md-4">
+    <label for="destinationNumber">Destinasjonsnummer: </label>
+    <br/>
+    <input class="form-control" [(ngModel)]="routeCall.destination_number" />
+  </div>
+
+  <div class="col-md-4" *ngIf="user.isAdmin()">
+    <label>AnswerCallPolicy: </label>
+    <br/>
+    <div [(ngModel)]="routeCall.answer_call_policy" ngbRadioGroup>
+      <button type="button" class="btn dropdown-toggle btn-primary" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+        {{routeCall.answerCallPolicy}}
+      </button>
+      <div class="dropdown-menu">
+        <a *ngFor="let option of answerCallPolicyOptions" class="dropdown-item" href="#"
+           (click)="setAnswerCallPolicy(option)">{{option}}</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row" *ngIf="user.isAdmin()">
+  <div class="col-md-4">
+    <label>Use true A-number: </label>
+    <form class="form-inline">
+      <label class="btn btn-primary">
+        <input class="input-radio-margin" type="radio" name="ms-radio-routecall" [value]="true" [(ngModel)]="routeCall.use_true_a_number"> Yes
+      </label>
+      <label class="btn btn-primary" style="margin-left: 5px">
+        <input class="input-radio-margin" type="radio" name="ms-radio-routecall" [value]="false" [(ngModel)]="routeCall.use_true_a_number"> No
+      </label>
+    </form>
+  </div>
+
+  <div class="col-md-4">
+    <label>Tid å vente på svar: </label>
+    <br/>
+    <input class="form-control" [(ngModel)]="routeCall.no_answer_timer"/>
+  </div>
+</div>
+
+<hr>
+<div class="row">
+  <div class="col-md-2">
+    <button onmousedown="event.preventDefault()" class="btn btn-primary" type="submit"
+      (click)=saveModule() [ngClass]="{'btn-saved': buttonAnimations.saved, 'btn-saved-error': buttonAnimations.error}">
+      Lagre
+    </button>
+  </div>
+</div>

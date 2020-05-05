@@ -1,0 +1,19 @@
+
+<div *ngIf="user.isSuperAdmin()" class="row">
+  <ngb-accordion class="col">
+    <ngb-panel title="JSON">
+      <ng-template ngbPanelContent>
+        <pre>{{ customer | json }}</pre>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+
+</div>
+
+<app-customer [customer]="customer"></app-customer>
+
+<!-- <div *ngIf="user.isAdmin()" class="row">
+  <div class="col">
+    <button class="btn btn-primary" (click)="saveCustomer()">Lagre</button>
+  </div>
+</div> -->

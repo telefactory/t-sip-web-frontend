@@ -1,0 +1,154 @@
+.service-cursive {
+    font-style: italic;
+    font-weight: normal!important;
+}
+
+.service-red {
+    font-style: italic;
+    text-decoration: line-through;
+    color: red;
+    font-weight: normal!important;
+}
+
+.service-blue {
+    font-style: italic;
+    text-decoration: line-through;
+    color: blue;
+    font-weight: normal!important;
+}
+
+.serviceGroup input[type="radio"] {
+    font-size: 5px;
+    height: 11px;
+}
+
+.serviceGroup table tr td:first-child {
+    height: 11px;
+    font-size: 5px;
+    max-width: 11px;
+    padding: 0px 15px 0 0px;
+}
+
+.serviceGroup table tr td:nth-child(2) {
+    padding: 0 15px 0 0;
+    min-width: 91px;
+}
+
+.serviceGroup table tr td[colspan="3"] {
+    max-width: 100%;
+    font-size: 1rem;
+}
+
+.serviceGroup table {
+    border-collapse: separate;
+    border-spacing: 0;
+    display: table;
+}
+
+.serviceGroup .even:not(.btn-success) {
+    background: #b0b0b0;
+    border-color: #b0b0b0;
+}
+
+.serviceGroup .odd:not(.btn-success) {
+    background: #817f82;
+    border-color: #817f82;
+}
+.serviceGroups {
+    width: auto;
+    display: table;
+}
+
+.serviceGroup .btn {
+    margin: 0;
+    width: 100%;
+}
+
+.serviceGroup .btn.margin {
+    margin: 0 0 5px 0;
+}
+
+label {
+    margin: 0.3rem 0 0.1rem 0;
+}
+
+.group button {
+    padding: 0;
+    line-height: .5;
+}
+
+.group button input[type="radio"]{
+    height: 11px;
+}
+
+.column-bottom {
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+.flex-grow {
+    flex: 1 0 auto;
+}
+
+select[multiple="multiple"] option {
+    line-height: 19px;
+    min-height: 19px;
+}
+
+div.padding {
+    padding: .5rem 0;
+}
+
+.statisticsRestrictionsPadding {
+    padding-top: 15px;
+}
+
+.header h5, .header input {
+    display: inline-block;
+}
+
+.header input {
+    width: auto;
+    height: auto;
+    margin-right: 2px;
+}
+
+.header span {
+    margin: 0 0 0 20px;
+}
+
+.availableNumber {
+    padding: 10px 0 0 15px;
+}
+
+.availableNumberPhone {
+    display: none;
+}
+
+@media only screen and (min-width: 768px) {
+    .col-md-auto {
+        max-width: 16.66%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .availableNumber {
+        display: none;
+    }
+
+    .availableNumberPhone {
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .header span {
+        display: block;
+        margin: 0;
+    }
+
+    .column-bottom {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+}
